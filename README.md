@@ -16,3 +16,16 @@ Use Python-based machine learning to forecast no-shows and allow healthcare faci
 - Jupyter Notebook
 - Matplotlib / Seaborn
 - (Optional) SMOTE, XGBoost
+##  Machine Learning
+- Models: Logistic Regression, Random Forest, XGBoost
+- Metrics: Accuracy, Precision, Recall, F1-score
+- Handle imbalance with SMOTE
+
+##  Dataset
+- Source: [Kaggle No Show Medical Appointments](https://www.kaggle.com/datasets/joniarroba/noshowappointments)
+- Features: Age, gender, appointment day, SMS reminder, no-show history
+
+##  Folders
+/notebooks → Model development 
+/flask_app → Web API for predictions
+/docs → Reports & Final poster PPTX
