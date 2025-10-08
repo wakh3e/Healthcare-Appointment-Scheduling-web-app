@@ -1,0 +1,161 @@
+{%extends "base.html"%}
+
+{%block content%}
+<div class="dashboard-header mb-5">
+    <h2 class='text-center fw-bold'>Appointment Analytics Dashboard</h2>
+    <p class="text-center text-muted">Real-time insights into appointment patterns and no-show trends</p>
+</div>
+
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<!-- Key Metrics Cards -->
+<div class='row mb-5'>
+    <div class='col-md-3'>
+        <div class='dashboard-stat stat-total'>
+            <div class="stat-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <h3>{{ total_appointments }}</h3>
+            <p>Total Appointments</p>
+        </div>
+    </div>
+    <div class='col-md-3'>
+        <div class='dashboard-stat stat-no-show'>
+            <div class="stat-icon">
+                <i class="fas fa-user-times"></i>
+            </div>
+            <h3>{{ no_show_count }}</h3>
+            <p>No-shows</p>
+        </div>
+    </div>
+    <div class='col-md-3'>
+        <div class='dashboard-stat stat-rate'>
+            <div class="stat-icon">
+                <i class="fas fa-chart-pie"></i>
+            </div>
+            <h3>{{ no_show_rate }}%</h3>
+            <p>No-show Rate</p>
+        </div>
+    </div>
+    <div class='col-md-3'>
+        <div class='dashboard-stat stat-attended'>
+            <div class="stat-icon">
+                <i class="fas fa-user-check"></i>
+            </div>
+            <h3>{{ total_appointments - no_show_count }}</h3>
+            <p>Attended</p>
+        </div>
+    </div>
+</div>
+
+<!-- Visualization Row 1 -->
+<div class='row mb-4'>
+    <div class='col-md-6'>
+        <div class='card h-100'>
+            <div class='card-header'>
+                <h5><i class="fas fa-venus-mars me-2"></i>Attendance by Gender</h5>
+            </div>
+            <div class='card-body'>
+                {% if plots.gender %}
+                <img src='data:image/png;base64,{{ plots.gender }}' class='img-fluid' alt='Attendance by Gender'>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+                    <p>No data available for visualization</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class='col-md-6'>
+        <div class='card h-100'>
+            <div class='card-header'>
+                <h5><i class="fas fa-users me-2"></i>Attendance by Age Group</h5>
+            </div>
+            <div class="card-body">
+                {% if plots.age %}
+                <img src="data:image/png;base64,{{ plots.age }}" class="img-fluid" alt="Attendance by Age Group">
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+                    <p>No data available for visualization</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Visualization Row 2 -->
+<div class='row mb-4'>
+    <div class='col-md-6'>
+        <div class='card h-100'>
+            <div class='card-header'>
+                <h5><i class="fas fa-sms me-2"></i>Attendance by SMS Notification</h5>
+            </div>
+            <div class="card-body">
+                {% if plots.sms %}
+                <img src="data:image/png;base64,{{ plots.sms }}" class="img-fluid" alt="Attendance by SMS Notification">
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+                    <p>No data available for visualization</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class='col-md-6'>
+        <div class='card h-100'>
+            <div class='card-header'>
+                <h5><i class="fas fa-clock me-2"></i>No-show Rate by Waiting Time</h5>
+            </div>
+            <div class="card-body">
+                {% if plots.wait_time %}
+                <img src="data:image/png;base64,{{ plots.wait_time }}" class="img-fluid" alt="No-show Rate by Waiting Time">
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                    <p>No data available for visualization</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Insights Section -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-lightbulb me-2"></i>Key Insights</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="insight-item">
+                            <h6 class="text-primary">SMS Impact</h6>
+                            <p>Patients who receive SMS reminders are {% if no_show_rate < 15 %}less{% else %}more{% endif %} likely to attend appointments.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="insight-item">
+                            <h6 class="text-success">Best Time</h6>
+                            <p>Appointments scheduled within 7 days have the highest attendance rates.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="insight-item">
+                            <h6 class="text-warning">Risk Factors</h6>
+                            <p>Longer waiting times and certain age groups show higher no-show patterns.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
