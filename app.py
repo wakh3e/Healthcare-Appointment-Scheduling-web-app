@@ -1,8 +1,3 @@
-"""
-Hospital Appointment No-Show Prediction System
-Main Flask application with ML model integration and time series analysis
-"""
-
 from flask import Flask, render_template, request, jsonify, session
 import pandas as pd
 import joblib
@@ -29,10 +24,6 @@ model = None
 deep_scaler = None
 
 def train_ml_model():
-    """
-    Train ML model using the provided dataset
-    This replaces the sample model creation with actual training
-    """
     try:
         print("Training ML model from dataset...")
         
@@ -44,12 +35,12 @@ def train_ml_model():
             print("Dataset.csv not found. Using sample data for training...")
             return create_sample_model()
         
-        # Data preprocessing similar to train_model.py
-        # Convert dates to datetime (fixing typo from original train_model.py)
+        # Data preprocessing 
+        # Convert dates to datetime 
         df['ScheduledDay'] = pd.to_datetime(df['ScheduledDay'])
         df['AppointmentDay'] = pd.to_datetime(df['AppointmentDay'])
         
-        # Create DaysUntilAppointment feature (fixing typo)
+        # Create DaysUntilAppointment feature
         df['DaysUntilAppointment'] = (df['AppointmentDay'] - df['ScheduledDay']).dt.days
         
         # Ensure DaysUntilAppointment is non-negative
@@ -58,11 +49,11 @@ def train_ml_model():
         # Encode categorical variables
         df['Gender'] = df['Gender'].map({'F': 0, 'M': 1})
         
-        # Encoding target (handle both string and numeric)
+        # Encoding target 
         if df['No-show'].dtype == 'object':
             df['No-show'] = df['No-show'].map({'No': 0, 'Yes': 1})
         
-        # Select features for training (using same features as prediction form)
+        # Select features for training
         features = ['Gender', 'Age', 'SMS_received', 'DaysUntilAppointment']
         
         # Check if all required features exist
@@ -557,4 +548,5 @@ if __name__ == '__main__':
     print("📊 Loading ML models and data...")
     initialize_app()
     print("✅ System ready! Starting web server...")
+
     app.run(debug=True, host='0.0.0.0', port=5000)
