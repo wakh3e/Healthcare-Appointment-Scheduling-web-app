@@ -1,0 +1,186 @@
+{% extends "base.html"%}
+{% block content%}
+
+<div class="row justify-content-center">
+    <div class='col-lg-8'>
+        <div class='card'>
+            <div class='card-header bg-primary text-white'>
+                <h3 class='mb-0'><i class="fas fa-brain me-2"></i>No-show Prediction</h3>
+                <p class="mb-0 mt-1 small opacity-75">AI-powered prediction of patient appointment attendance</p>
+            </div>
+            <div class='card-body'>
+                <!-- Display error message if present -->
+                {%if error%}
+                <div class='alert alert-danger d-flex align-items-center'>
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <div>{{ error }}</div>
+                </div>
+                {%endif%}
+
+                <!-- Display prediction result if available -->
+                {%if result%} 
+                <div class="alert alert-{{ 'danger' if result.prediction == 'No-show' else 'success' }}">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h4 class="alert-heading">
+                                <i class="fas fa-{{ 'exclamation-triangle' if result.prediction == 'No-show' else 'check-circle' }} me-2"></i>
+                                Prediction: {{ result.prediction }}
+                            </h4>
+                            <p class="mb-2">Probability: <strong>{{ result.probability }}%</strong></p>
+                            <p class="mb-0 small">
+                                Confidence: 
+                                <span class="badge bg-{{ 'success' if result.confidence == 'high' else 'warning' if result.confidence == 'medium' else 'secondary' }}">
+                                    {{ result.confidence }}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="text-{{ 'danger' if result.prediction == 'No-show' else 'success' }} fs-1">
+                            {{ result.probability }}%
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="mb-2"><strong>Patient Details Used:</strong></p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-venus-mars text-primary me-2"></i>Gender: {{ result.gender }}</li>
+                                <li><i class="fas fa-birthday-cake text-success me-2"></i>Age: {{ result.age }}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-sms text-info me-2"></i>SMS Received: {{ result.sms_received }}</li>
+                                <li><i class="fas fa-calendar-day text-warning me-2"></i>Days Until: {{ result.days_until }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recommendations based on prediction -->
+                <div class="card mt-3">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0">Recommendations</h6>
+                    </div>
+                    <div class="card-body">
+                        {% if result.prediction == 'No-show' %}
+                        <div class="alert alert-warning">
+                            <h6><i class="fas fa-exclamation-circle me-2"></i>High Risk of No-show</h6>
+                            <ul class="mb-0">
+                                <li>Consider sending an SMS reminder 24 hours before appointment</li>
+                                <li>Follow up with a phone call confirmation</li>
+                                <li>Schedule a backup appointment slot if possible</li>
+                            </ul>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-success">
+                            <h6><i class="fas fa-thumbs-up me-2"></i>Low Risk of No-show</h6>
+                            <ul class="mb-0">
+                                <li>Standard reminder process is sufficient</li>
+                                <li>Patient has good attendance probability</li>
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Button to make another prediction -->
+                <div class="text-center mt-4">
+                    <a href='/predict' class='btn btn-primary'>
+                        <i class="fas fa-redo me-2"></i>Make Another Prediction
+                    </a>
+                </div>
+                {%else%}
+                
+                <!-- Prediction input form -->
+                <form method='POST' id="predictionForm">
+                    <div class="row">
+                        <div class='col-md-6'>
+                            <div class='mb-3'>
+                                <label for='gender' class='form-label'><i class="fas fa-venus-mars me-1 text-primary"></i>Gender</label>
+                                <select class='form-select' id='gender' name='gender' required>
+                                    <option value=''>Select Gender</option>
+                                    <option value='Female'>Female</option>
+                                    <option value='Male'>Male</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class='col-md-6'>
+                            <div class='mb-3'>
+                                <label for ='age' class='form-label'><i class="fas fa-birthday-cake me-1 text-success"></i>Age</label>
+                                <input type='number' class='form-control' id='age' name='age' min='0' max='120' 
+                                       placeholder='Enter age (0-120)' required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class='col-md-6'>
+                            <div class='mb-3'>
+                                <label for='sms_received' class='form-label'><i class="fas fa-sms me-1 text-info"></i>SMS Received</label>
+                                <select class='form-select' id='sms_received' name='sms_received' required>
+                                    <option value=''>Select Option</option>
+                                    <option value='Yes'>Yes</option>
+                                    <option value='No'>No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class='col-md-6'>
+                            <div class='mb-3'>
+                                <label for='days_until' class='form-label'>
+                                    <i class="fas fa-calendar-day me-1 text-warning"></i>Days Until Appointment
+                                </label>
+                                <input type='number' class='form-control' id='days_until' name='days_until' 
+                                       min='0' placeholder='Enter days until appointment' required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type='submit' class='btn btn-primary btn-lg'>
+                            <i class="fas fa-rocket me-2"></i>Predict Attendance
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Form validation helper -->
+                <div class="card mt-4">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>About the Prediction Model</h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="small mb-2">The AI model analyzes historical appointment data considering:</p>
+                        <ul class="small mb-0">
+                            <li>Patient demographics (age, gender)</li>
+                            <li>Appointment scheduling factors</li>
+                            <li>SMS notification effectiveness</li>
+                            <li>Historical attendance patterns</li>
+                        </ul>
+                    </div>
+                </div>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('predictionForm').addEventListener('submit', function(e) {
+    const age = document.getElementById('age').value;
+    const daysUntil = document.getElementById('days_until').value;
+    
+    if (age && (age < 0 || age > 120)) {
+        alert('Please enter a valid age between 0 and 120');
+        e.preventDefault();
+        return false;
+    }
+    
+    if (daysUntil && daysUntil < 0) {
+        alert('Days until appointment cannot be negative');
+        e.preventDefault();
+        return false;
+    }
+});
+</script>
+{% endblock %}
