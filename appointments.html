@@ -50,7 +50,7 @@
                         <td>{{ appt.ScheduledDay }}</td>
                         <td>{{ appt.AppointmentDay }}</td>
                         <td>
-                            <span class="badge bg-secondary">{{ appt.Age }}</td>
+                            <span class="badge bg-secondary">{{ appt.Age }}</span>
                         <td>
                             <span class="badge {% if appt.DaysUntilAppointment > 7 %}bg-warning{% else %}bg-success{% endif %}">
                                 {{ appt.DaysUntilAppointment }} days
@@ -95,3 +95,4 @@ function exportAppointments() {
 </script>
 
 {% endblock %}
+
