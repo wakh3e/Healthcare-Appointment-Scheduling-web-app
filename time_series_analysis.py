@@ -8,7 +8,9 @@ df = pd.read_csv('Dataset.csv')
 #Map No-show to binary
 df['No-show'] = df['No-show'].map({'No':0, 'Yes':1})
 
-
+if 'ScheduledDay' in df.columns:
+    df['ScheduledDay'] = pd.to_datetime(df['ScheduledDay'])
+  
 #convert appointment and schedule day to datetime
 df['AppointmentDay'] = pd.to_datetime(df['AppointmentDay'])
 
@@ -40,3 +42,4 @@ summary = df.groupby(['Month', 'Weekday'])['No-show'].mean().reset_index()
 summary.to_csv('no_show_summary.csv', index=False)
 
 print("time_series_analysis completed and plots saved.") 
+
