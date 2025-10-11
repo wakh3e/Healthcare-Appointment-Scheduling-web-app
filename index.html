@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section text-center py-5 mb-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold text-primary mb-3">Hospital Appointment No-show Prediction</h1>
+        <p class="lead fs-4">Using Artificial Intelligence to predict patient attendance and optimize hospital resources</p>
+        <div class="mt-4">
+            <a href="/predict" class="btn btn-primary btn-lg me-3">Make Prediction</a>
+            <a href="/dashboard" class="btn btn-outline-primary btn-lg">View Analytics</a>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="feature-card card h-100">
+                <div class="card-body text-center p-4">
+                    <i class='fas fa-chart-line fa-3x text-primary mb-3'></i>
+                    <h4 class='card-title fw-bold'>Analytics Dashboard</h4>
+                    <p class='card-text'>Visualize appointment trends, no-show patterns, and key performance metrics with interactive charts and graphs.</p>
+                    <a href='/dashboard' class='btn btn-primary mt-3'>View Dashboard</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="feature-card card h-100">
+                <div class="card-body text-center p-4">
+                    <i class='fas fa-brain fa-3x text-success mb-3'></i>
+                    <h4 class='card-title fw-bold'>AI Prediction Model</h4>
+                    <p class='card-text'>Predict patient no-shows using machine learning. Get real-time risk assessments based on patient demographics and appointment details.</p>
+                    <a href='/predict' class='btn btn-success mt-3'>Make Prediction</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="feature-card card h-100">
+                <div class="card-body text-center p-4">
+                    <i class='fas fa-calendar-alt fa-3x text-info mb-3'></i>
+                    <h4 class='card-title fw-bold'>Appointment Management</h4>
+                    <p class='card-text'>View and manage all scheduled appointments. Track attendance history and patient patterns.</p>
+                    <a href='/appointments' class='btn btn-info mt-3'>View Appointments</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Overview -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">System Overview</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <h3 class="text-primary">500+</h3>
+                            <p class="text-muted">Appointments Tracked</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h3 class="text-success">85%</h3>
+                            <p class="text-muted">Average Attendance Rate</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h3 class="text-warning">15%</h3>
+                            <p class="text-muted">No-show Rate</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h3 class="text-info">95%</h3>
+                            <p class="text-muted">Prediction Accuracy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
