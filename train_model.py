@@ -9,12 +9,12 @@ from sklearn.metrics import accuracy_score
 df = pd.read('Dataset.csv')
 
 #Convert dates to datetime
-df['ScheduleDay'] = pd.to_datetime(df['ScheduleDay'])
+df['ScheduledDay'] = pd.to_datetime(df['ScheduledDay'])
 df['AppointmentDay'] = pd.to_datetime(df['AppointmentDay'])
 
 
 #Create DaysuntilAppointment feature
-df['DaysUntilAppointment'] = df['Appointmentday'] - df['Scheduleday']
+df['DaysUntilAppointment'] = (df['AppointmentDay'] - df['ScheduledDay']).dt.days
 
 #Encode categorical variables
 df['Gender'] = df['Gender'].map({'F':0 , 'M':1})
@@ -41,4 +41,5 @@ print(f'RandomForest Model Accuracy: {accuracy*100:.2f}%')
 
 #Save model
 joblib.dump(model, 'no_show_model.pkl')
+
 print("Model saved as no_show_model.pkl")
