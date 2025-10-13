@@ -274,7 +274,7 @@ def load_or_create_data():
         return pd.DataFrame()
 
 # Initialize model and data on startup
-@app.before_first_request
+@app.before_request
 def initialize_app():
     """Initialize ML model and data when app starts"""
     global model, deep_scaler

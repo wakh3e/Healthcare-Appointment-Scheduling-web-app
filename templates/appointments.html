@@ -1,0 +1,98 @@
+{% extends "base.html"%}
+{%block content%}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class='mb-0'>Appointment List</h2>
+    <div>
+        <span class="badge bg-primary fs-6">Total: {{ appointments|length }} appointments</span>
+    </div>
+</div>
+
+<div class='card'>
+    <div class='card-header'>
+        <h5 class='mb-0'><i class="fas fa-list me-2"></i>All Scheduled Appointments</h5>
+    </div>
+    <div class='card-body'>
+        {% if not appointments %}
+        <div class="text-center py-5">
+            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+            <h5>No appointments found</h5>
+            <p class="text-muted">No appointment data is currently available.</p>
+        </div>
+        {% else %}
+        <div class='table-responsive'>
+            <table class='table table-striped table-hover'>
+                <thead class='table-dark'>
+                    <tr>
+                        <th>Appointment ID</th>
+                        <th>Patient ID</th>
+                        <th>Gender</th>
+                        <th>Scheduled Date</th>
+                        <th>Appointment Date</th>
+                        <th>Age</th>
+                        <th>Wait Days</th>
+                        <th>SMS Received</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for appt in appointments%}
+                    <tr>
+                        <td><strong>#{{ appt.AppointmentID }}</strong></td>
+                        <td>PID-{{ appt.PatientId }}</td>
+                        <td>
+                            {% if appt.Gender == 'M' %}
+                                <i class="fas fa-mars text-primary"></i> Male
+                            {% else %}
+                                <i class="fas fa-venus text-danger"></i> Female
+                            {% endif %}
+                        </td>
+                        <td>{{ appt.ScheduledDay }}</td>
+                        <td>{{ appt.AppointmentDay }}</td>
+                        <td>
+                            <span class="badge bg-secondary">{{ appt.Age }}</span>
+                        <td>
+                            <span class="badge {% if appt.DaysUntilAppointment > 7 %}bg-warning{% else %}bg-success{% endif %}">
+                                {{ appt.DaysUntilAppointment }} days
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge {% if appt.SMS_received == 1 %}bg-success{% else %}bg-secondary{% endif %}">
+                                {{ 'Yes' if appt.SMS_received == 1 else 'No' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class='badge {% if appt["No-show"] == "No" %}bg-success{% else %}bg-danger{% endif %}'>
+                                <i class="fas {% if appt['No-show'] == 'No' %}fa-check{% else %}fa-times{% endif %} me-1"></i>
+                                {{ 'Attended' if appt['No-show'] == 'No' else 'No-show'}}
+                            </span>
+                        </td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination or summary -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <small class="text-muted">Showing {{ appointments|length }} appointments</small>
+            <button class="btn btn-sm btn-outline-primary" onclick="exportAppointments()">
+                <i class="fas fa-download me-1"></i>Export Data
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function exportAppointments() {
+    // Simple export functionality - in a real app, this would generate a CSV
+    alert('Export functionality would be implemented here. This would typically generate a CSV file of all appointments.');
+}
+</script>
+
+{% endblock %}
+
