@@ -425,13 +425,22 @@ def predict():
             else:
                 features_scaled = features
             
+            # Make prediction
             prediction = model.predict(features_scaled)[0]
-            probability = model.predict_proba(features_scaled)[0][1]
+            probability = model.predict_proba(features_scaled)[0][1]  # Probability of no-show
+            
+            # Determine confidence level
+            if probability > 0.7:
+                confidence = 'high'
+            elif probability > 0.4:
+                confidence = 'medium'
+            else:
+                confidence = 'low'
             
             result = {
                 'prediction': 'No-show' if prediction == 1 else 'Will Attend',
                 'probability': round(probability * 100, 2),
-                'confidence': 'high' if probability > 0.7 else 'medium' if probability > 0.4 else 'low',
+                'confidence': confidence,
                 'gender': 'Male' if gender == 1 else 'Female',
                 'age': age,
                 'sms_received': 'Yes' if sms_received == 1 else 'No',
@@ -441,10 +450,11 @@ def predict():
             return render_template('predict.html', result=result)
             
         except Exception as e:
+            print(f"Prediction error: {e}")  # Debug print
             return render_template('predict.html', error=f"Error processing request: {str(e)}")
     
     return render_template('predict.html')
-
+    
 @app.route('/api/predict', methods=['POST'])
 def api_predict():
     """JSON API endpoint for predictions"""
@@ -550,3 +560,4 @@ if __name__ == '__main__':
     print("✅ System ready! Starting web server...")
 
     app.run(debug=True, host='0.0.0.0', port=5000)
+
